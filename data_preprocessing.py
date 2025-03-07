@@ -30,24 +30,28 @@ def split_classification_data(df):
     X_test = scaler_X.transform(X_test)
 
 
+
     return X_train, X_val, X_test, y_train, y_val, y_test # return all data splitted (train, validation, test)
 
 
 def split_regression_data(df):
-    X = df.drop(columns=['Median_House_Value']) # all data without target class
-    y = df['Median_House_Value'] # target class
+    X = df.drop(columns=['Median_House_Value'])  # Features
+    y = data['Median_House_Value'].to_frame()  # Target, reshaped for scaler and convert it to dataframe to become 2d using (to_frame())
 
-    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42) # splitting the data into 70% train and 30% for validation and test (temp)
-    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42) # splitting the temp data into (15% test, 15% validation (from original dataset))
+    # Train-Test Split
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_val = scaler.transform(X_val)
-    X_test = scaler.transform(X_test)
+    # Scale X (features)
+    scaler_X = StandardScaler()
+    X_train = scaler_X.fit_transform(X_train)
+    X_val = scaler_X.transform(X_val)
+    X_test = scaler_X.transform(X_test)
 
+    # Scale y (target variable)
+    scaler_y = StandardScaler()
+    y_train = scaler_y.fit_transform(y_train)  # Fit on train only
+    y_val = scaler_y.transform(y_val)  # Transform val
+    y_test = scaler_y.transform(y_test)  # Transform test
 
-
-
-
-
-    return X_train, X_val, X_test, y_train, y_val, y_test # return all data splitted (train, validation, test)
+    return X_train, X_val, X_test, y_train, y_val, y_test

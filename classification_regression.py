@@ -52,6 +52,7 @@ def train_ridge(X_train, y_train, alpha=1.0):
 # evaluate the regression model (Linear, Ridge or Lasso) and return the mean squared error (mse) and maen absolute error (mae)
 def evaluate_regression(model, X_val, y_val):
     y_pred = model.predict(X_val)
+
     mse = mean_squared_error(y_val, y_pred)
     mae = mean_absolute_error(y_val, y_pred)
     return mse, mae
